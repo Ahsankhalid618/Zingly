@@ -78,15 +78,15 @@ export default function PersonaTool() {
     <div className="max-w-6xl mx-auto">
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Input Section */}
-        <Card className="shadow-lg lg:col-span-1">
+        <Card className="shadow-lg lg:col-span-1 border-slate-200 dark:border-slate-700">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-slate-800">
+            <CardTitle className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
               👤 QuickPersona
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
-              <label htmlFor="productDesc" className="block text-sm font-medium text-slate-700 mb-2">
+              <label htmlFor="productDesc" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                 Product Description * ({productDescription.length}/300)
               </label>
               <Textarea
@@ -100,7 +100,7 @@ export default function PersonaTool() {
             </div>
 
             {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm">
                 {error}
               </div>
             )}
@@ -108,7 +108,7 @@ export default function PersonaTool() {
             <Button
               onClick={handleGenerate}
               disabled={loading}
-              className="w-full bg-slate-800 hover:bg-slate-700 text-white py-3"
+              className="w-full bg-slate-800 hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 text-white py-3"
             >
               {loading ? 'Generating...' : 'Generate Personas'}
             </Button>
@@ -128,22 +128,22 @@ export default function PersonaTool() {
                 <div className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <span className="font-medium text-slate-700">Demographics:</span>
-                      <p className="text-slate-800 mt-1">
+                      <span className="font-medium text-slate-700 dark:text-slate-300">Demographics:</span>
+                      <p className="text-slate-800 dark:text-slate-200 mt-1">
                         {persona.age} years old, {persona.occupation}
                       </p>
                     </div>
                     <div>
-                      <span className="font-medium text-slate-700">Tech Familiarity:</span>
-                      <p className="text-slate-800 mt-1">
+                      <span className="font-medium text-slate-700 dark:text-slate-300">Tech Familiarity:</span>
+                      <p className="text-slate-800 dark:text-slate-200 mt-1">
                         {persona.techFamiliarity}/5 - {getTechFamiliarityLabel(persona.techFamiliarity)}
                       </p>
                     </div>
                   </div>
 
                   <div>
-                    <span className="font-medium text-slate-700">Goals & Motivations:</span>
-                    <ul className="list-disc list-inside text-slate-800 mt-1 space-y-1">
+                    <span className="font-medium text-slate-700 dark:text-slate-300">Goals & Motivations:</span>
+                    <ul className="list-disc list-inside text-slate-800 dark:text-slate-200 mt-1 space-y-1">
                       {persona.goals.map((goal, idx) => (
                         <li key={idx}>{goal}</li>
                       ))}
@@ -151,17 +151,17 @@ export default function PersonaTool() {
                   </div>
 
                   <div>
-                    <span className="font-medium text-slate-700">Pain Points:</span>
-                    <ul className="list-disc list-inside text-slate-800 mt-1 space-y-1">
+                    <span className="font-medium text-slate-700 dark:text-slate-300">Pain Points:</span>
+                    <ul className="list-disc list-inside text-slate-800 dark:text-slate-200 mt-1 space-y-1">
                       {persona.painPoints.map((pain, idx) => (
                         <li key={idx}>{pain}</li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="bg-slate-50 p-3 rounded-lg border-l-4 border-slate-400">
-                    <span className="font-medium text-slate-700">Quote:</span>
-                    <p className="text-slate-800 italic mt-1">"{persona.quote}"</p>
+                  <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg border-l-4 border-slate-400 dark:border-slate-600">
+                    <span className="font-medium text-slate-700 dark:text-slate-300">Quote:</span>
+                    <p className="text-slate-800 dark:text-slate-200 italic mt-1">&ldquo;{persona.quote}&rdquo;</p>
                   </div>
                 </div>
               }

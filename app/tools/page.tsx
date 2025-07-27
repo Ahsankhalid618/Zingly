@@ -62,20 +62,20 @@ export default function ToolsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
             <ZinglyLogo size="sm" className="text-white" />
             Zingly&apos;s Magical AI Tools
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
             AI-Powered Tools for
-            <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Startups
             </span>
           </h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+          <p className="text-xl text-slate-300 max-w-3xl mx-auto">
             Launch your startup faster with Zingly&apos;s magical suite of AI
             tools. Generate marketing copy, understand your users, and create
             stunning visuals in minutes.
@@ -86,24 +86,24 @@ export default function ToolsPage() {
           {tools.map((tool) => (
             <Card
               key={tool.title}
-              className="hover:shadow-xl transition-all duration-300 hover:scale-105 border-0 shadow-lg"
+              className="hover:shadow-xl transition-all duration-300 hover:scale-105 border-0 shadow-lg bg-slate-800 border-slate-700"
             >
               <CardHeader>
-                <CardTitle className="flex items-center gap-3">
+                <CardTitle className="flex items-center gap-3 text-white">
                   {tool.icon}
                   <span className="text-2xl font-bold">{tool.title}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <p className="text-slate-600 text-lg leading-relaxed">
+                <p className="text-slate-300 text-lg leading-relaxed">
                   {tool.description}
                 </p>
 
                 <div>
-                  <h4 className="font-semibold text-slate-900 mb-3">
+                  <h4 className="font-semibold text-white mb-3">
                     Key Benefits:
                   </h4>
-                  <ul className="list-disc list-inside text-sm text-slate-600 space-y-1">
+                  <ul className="list-disc list-inside text-sm text-slate-300 space-y-1">
                     {tool.benefits.map((benefit) => (
                       <li key={benefit}>{benefit}</li>
                     ))}
@@ -111,10 +111,10 @@ export default function ToolsPage() {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-slate-900 mb-3">
+                  <h4 className="font-semibold text-white mb-3">
                     Success Stories:
                   </h4>
-                  <ul className="list-disc list-inside text-sm text-slate-600 space-y-1">
+                  <ul className="list-disc list-inside text-sm text-slate-300 space-y-1">
                     {tool.examples.map((example) => (
                       <li key={example}>{example}</li>
                     ))}

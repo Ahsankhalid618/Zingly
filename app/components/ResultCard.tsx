@@ -13,7 +13,7 @@ export default function ResultCard({ title, icon, content }: ResultCardProps) {
   return (
     <Card className="shadow-lg hover:shadow-xl transition-shadow duration-200 border-l-4 border-l-slate-400">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-slate-800 text-lg">
+        <CardTitle className="flex items-center gap-2 text-slate-200 text-lg">
           <span>{icon}</span>
           {title}
         </CardTitle>

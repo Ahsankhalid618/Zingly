@@ -83,7 +83,7 @@ export default function MoodBoardTool() {
         {/* Input Section */}
         <Card className="shadow-lg max-w-2xl mx-auto">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-slate-800">
+            <CardTitle className="flex items-center gap-2 text-slate-200">
               🎨 MoodBoard AI
             </CardTitle>
           </CardHeader>
@@ -91,7 +91,7 @@ export default function MoodBoardTool() {
             <div>
               <label
                 htmlFor="themePrompt"
-                className="block text-sm font-medium text-slate-700 mb-2"
+                className="block text-sm font-medium text-slate-300 mb-2"
               >
                 Visual Theme Prompt *
               </label>
@@ -102,7 +102,7 @@ export default function MoodBoardTool() {
                 placeholder="e.g., 'modern minimalist workspace', 'retro gaming setup', 'cozy coffee shop'"
                 className="w-full"
               />
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-slate-300 mt-1">
                 Describe the visual style, mood, or theme you want to explore
               </p>
             </div>
@@ -193,8 +193,8 @@ export default function MoodBoardTool() {
                       </div>
                     </div>
                   </div>
-                  <CardContent className="p-3">
-                    <p className="text-sm text-slate-600 text-center">
+                  <CardContent className="p-3 border-t-slate-200 dark:border-t-slate-300">
+                    <p className="text-sm text-slate-200 text-center">
                       {image.type
                         ? image.description
                         : `Variation ${index + 1}`}

@@ -84,7 +84,7 @@ export default function PricingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
       {/* Hero Section */}
       <section className="pt-20 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -93,13 +93,13 @@ export default function PricingPage() {
               <ZinglyLogo size="sm" className="text-white" />
               Zingly&apos;s Magical Pricing
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white mb-6">
               Choose Your
               <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Growth Plan
               </span>
             </h1>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+            <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
               Start free and scale as you grow. No hidden fees, no surprises.
             </p>
           </div>
@@ -131,20 +131,24 @@ export default function PricingPage() {
                 <CardHeader className={`pt-8 ${plan.popular ? "pt-12" : ""}`}>
                   <div className="flex items-center gap-3 mb-4">
                     {plan.icon}
-                    <CardTitle className="text-2xl font-bold text-slate-900">
+                    <CardTitle className="text-2xl font-bold text-slate-900 dark:text-white">
                       {plan.name}
                     </CardTitle>
                   </div>
                   <div className="mb-4">
                     <div className="flex items-baseline gap-1">
-                      <span className="text-4xl font-bold text-slate-900">
+                      <span className="text-4xl font-bold text-slate-900 dark:text-white">
                         {plan.price}
                       </span>
                       {plan.period && (
-                        <span className="text-slate-600">{plan.period}</span>
+                        <span className="text-slate-600 dark:text-slate-300">
+                          {plan.period}
+                        </span>
                       )}
                     </div>
-                    <p className="text-slate-600 mt-2">{plan.description}</p>
+                    <p className="text-slate-600 dark:text-slate-300 mt-2">
+                      {plan.description}
+                    </p>
                   </div>
                 </CardHeader>
 
@@ -153,7 +157,9 @@ export default function PricingPage() {
                     {plan.features.map((feature) => (
                       <li key={feature} className="flex items-center gap-3">
                         <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                        <span className="text-slate-700">{feature}</span>
+                        <span className="text-slate-700 dark:text-slate-200">
+                          {feature}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -167,7 +173,7 @@ export default function PricingPage() {
                         ${
                           plan.popular
                             ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl"
-                            : "bg-slate-900 hover:bg-slate-800 text-white"
+                            : "bg-slate-900 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 text-white"
                         }
                       `}
                     >
@@ -182,13 +188,13 @@ export default function PricingPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
               Loved by Growing Startups
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
               See how our Pro plan is helping startups scale their marketing
               efforts.
             </p>
@@ -198,7 +204,7 @@ export default function PricingPage() {
             {testimonials.map((testimonial) => (
               <Card
                 key={testimonial.name}
-                className="hover:shadow-lg transition-shadow"
+                className="hover:shadow-lg transition-shadow dark:bg-slate-700 dark:border-slate-600"
               >
                 <CardContent className="p-6">
                   <div className="flex mb-4">
@@ -209,14 +215,16 @@ export default function PricingPage() {
                       />
                     ))}
                   </div>
-                  <p className="text-slate-600 mb-4 italic">
-                    "{testimonial.content}"
+                  <p className="text-slate-600 dark:text-slate-300 mb-4 italic">
+                    &ldquo;{testimonial.content}&rdquo;
                   </p>
                   <div>
-                    <p className="font-medium text-slate-900">
+                    <p className="font-medium text-slate-900 dark:text-white">
                       {testimonial.name}
                     </p>
-                    <p className="text-sm text-slate-600">{testimonial.role}</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                      {testimonial.role}
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -229,38 +237,38 @@ export default function PricingPage() {
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
               Frequently Asked Questions
             </h2>
           </div>
 
           <div className="space-y-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">
+            <div className="bg-white dark:bg-slate-700 p-6 rounded-lg shadow-md dark:border dark:border-slate-600">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
                 Can I upgrade or downgrade my plan anytime?
               </h3>
-              <p className="text-slate-600">
+              <p className="text-slate-600 dark:text-slate-300">
                 Yes! You can change your plan at any time. Upgrades take effect
                 immediately, and downgrades take effect at the next billing
                 cycle.
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">
+            <div className="bg-white dark:bg-slate-700 p-6 rounded-lg shadow-md dark:border dark:border-slate-600">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
                 Is there a free trial for paid plans?
               </h3>
-              <p className="text-slate-600">
+              <p className="text-slate-600 dark:text-slate-300">
                 Yes, we offer a 7-day free trial for our Pro plan. No credit
                 card required to start your trial.
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">
+            <div className="bg-white dark:bg-slate-700 p-6 rounded-lg shadow-md dark:border dark:border-slate-600">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
                 What payment methods do you accept?
               </h3>
-              <p className="text-slate-600">
+              <p className="text-slate-600 dark:text-slate-300">
                 We accept all major credit cards, PayPal, and bank transfers for
                 Enterprise plans.
               </p>

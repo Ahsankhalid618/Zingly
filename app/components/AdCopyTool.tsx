@@ -75,13 +75,13 @@ export default function AdCopyTool() {
         {/* Input Section */}
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-slate-800">
+            <CardTitle className="flex items-center gap-2 text-foreground">
               📝 Ad Copy Remix
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
-              <label htmlFor="productName" className="block text-sm font-medium text-slate-700 mb-2">
+              <label htmlFor="productName" className="block text-sm font-medium text-muted-foreground mb-2">
                 Product Name *
               </label>
               <Input
@@ -94,7 +94,7 @@ export default function AdCopyTool() {
             </div>
 
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-slate-700 mb-2">
+              <label htmlFor="description" className="block text-sm font-medium text-muted-foreground mb-2">
                 Short Description * ({description.length}/200)
               </label>
               <Textarea
@@ -108,7 +108,7 @@ export default function AdCopyTool() {
             </div>
 
             {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm">
                 {error}
               </div>
             )}
@@ -116,7 +116,7 @@ export default function AdCopyTool() {
             <Button
               onClick={handleGenerate}
               disabled={loading}
-              className="w-full bg-slate-800 hover:bg-slate-700 text-white py-3"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3"
             >
               {loading ? 'Generating...' : 'Generate Ad Copy'}
             </Button>
@@ -135,14 +135,14 @@ export default function AdCopyTool() {
                 content={
                   <div className="space-y-2">
                     <div>
-                      <span className="font-medium text-slate-700">Headline:</span>
-                      <p className="text-slate-800 bg-slate-50 p-2 rounded mt-1">
+                      <span className="font-medium text-muted-foreground">Headline:</span>
+                      <p className="text-foreground bg-muted p-2 rounded mt-1">
                         {results.googleAd.headline}
                       </p>
                     </div>
                     <div>
-                      <span className="font-medium text-slate-700">Description:</span>
-                      <p className="text-slate-800 bg-slate-50 p-2 rounded mt-1">
+                      <span className="font-medium text-muted-foreground">Description:</span>
+                      <p className="text-foreground bg-muted p-2 rounded mt-1">
                         {results.googleAd.description}
                       </p>
                     </div>
@@ -153,8 +153,9 @@ export default function AdCopyTool() {
               <ResultCard
                 title="Instagram Caption"
                 icon="📸"
+                
                 content={
-                  <p className="text-slate-800 whitespace-pre-line">
+                  <p className="text-foreground whitespace-pre-line">
                     {results.instagramCaption}
                   </p>
                 }
@@ -164,7 +165,7 @@ export default function AdCopyTool() {
                 title="Tweet"
                 icon="🐦"
                 content={
-                  <p className="text-slate-800">
+                  <p className="text-foreground">
                     {results.tweet}
                   </p>
                 }
@@ -176,14 +177,14 @@ export default function AdCopyTool() {
                 content={
                   <div className="space-y-2">
                     <div>
-                      <span className="font-medium text-slate-700">Subject Line:</span>
-                      <p className="text-slate-800 bg-slate-50 p-2 rounded mt-1">
+                      <span className="font-medium text-muted-foreground">Subject Line:</span>
+                      <p className="text-foreground bg-muted p-2 rounded mt-1">
                         {results.emailSubject.subject}
                       </p>
                     </div>
                     <div>
-                      <span className="font-medium text-slate-700">Tagline:</span>
-                      <p className="text-slate-800 bg-slate-50 p-2 rounded mt-1">
+                      <span className="font-medium text-muted-foreground">Tagline:</span>
+                      <p className="text-foreground bg-muted p-2 rounded mt-1">
                         {results.emailSubject.tagline}
                       </p>
                     </div>
