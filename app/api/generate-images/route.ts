@@ -1,94 +1,112 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-// Since Gemini doesn't support image generation, we'll use a curated set of stock images
-// and create a mood board based on the theme prompt
+// Add configuration for dynamic API route
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
+interface GeminiPart {
+  text?: string;
+  inlineData?: {
+    mimeType: string;
+    data: string;
+  };
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { themePrompt } = await request.json();
 
     if (!themePrompt) {
       return NextResponse.json(
-        { error: 'Theme prompt is required' },
+        { error: "Theme prompt is required" },
         { status: 400 }
       );
     }
 
-    // Generate curated stock images based on common themes
-    const getImagesForTheme = (prompt: string) => {
-      const lowerPrompt = prompt.toLowerCase();
-      
-      // Define theme-based image sets from Pexels
-      const themeImages = {
-        workspace: [
-          'https://images.pexels.com/photos/3586966/pexels-photo-3586966.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/574077/pexels-photo-574077.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/1061588/pexels-photo-1061588.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/3194521/pexels-photo-3194521.jpeg?auto=compress&cs=tinysrgb&w=400'
-        ],
-        minimalist: [
-          'https://images.pexels.com/photos/6899260/pexels-photo-6899260.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/4352247/pexels-photo-4352247.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/2740954/pexels-photo-2740954.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400'
-        ],
-        coffee: [
-          'https://images.pexels.com/photos/302896/pexels-photo-302896.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/1307698/pexels-photo-1307698.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/851555/pexels-photo-851555.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/1549200/pexels-photo-1549200.jpeg?auto=compress&cs=tinysrgb&w=400'
-        ],
-        retro: [
-          'https://images.pexels.com/photos/1037993/pexels-photo-1037993.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/5632382/pexels-photo-5632382.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/735911/pexels-photo-735911.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/1772123/pexels-photo-1772123.jpeg?auto=compress&cs=tinysrgb&w=400'
-        ],
-        nature: [
-          'https://images.pexels.com/photos/440731/pexels-photo-440731.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/1025469/pexels-photo-1025469.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/1671325/pexels-photo-1671325.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=400'
-        ],
-        tech: [
-          'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/2599244/pexels-photo-2599244.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=400',
-          'https://images.pexels.com/photos/1194713/pexels-photo-1194713.jpeg?auto=compress&cs=tinysrgb&w=400'
-        ]
-      };
+    const apiKey = process.env.GEMINI_API_KEY;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-preview-image-generation:generateContent?key=${apiKey}`;
 
-      // Match theme keywords to image sets
-      if (lowerPrompt.includes('workspace') || lowerPrompt.includes('office') || lowerPrompt.includes('desk')) {
-        return themeImages.workspace;
-      } else if (lowerPrompt.includes('minimal') || lowerPrompt.includes('clean') || lowerPrompt.includes('simple')) {
-        return themeImages.minimalist;
-      } else if (lowerPrompt.includes('coffee') || lowerPrompt.includes('cafe') || lowerPrompt.includes('cozy')) {
-        return themeImages.coffee;
-      } else if (lowerPrompt.includes('retro') || lowerPrompt.includes('vintage') || lowerPrompt.includes('gaming')) {
-        return themeImages.retro;
-      } else if (lowerPrompt.includes('nature') || lowerPrompt.includes('outdoor') || lowerPrompt.includes('green')) {
-        return themeImages.nature;
-      } else if (lowerPrompt.includes('tech') || lowerPrompt.includes('modern') || lowerPrompt.includes('digital')) {
-        return themeImages.tech;
-      } else {
-        // Default to workspace theme
-        return themeImages.workspace;
+    // Define specific prompts for each image type
+    const prompts = [
+      // Color palette prompt
+      `Create a professional color palette image for "${themePrompt}". Generate a clean, modern color scheme with 5-7 complementary colors arranged in horizontal or vertical strips. Each color should be clearly defined and labeled with its hex code. The palette should reflect the mood, style, and essence of "${themePrompt}". Use a clean white background with subtle shadows for depth. Make it suitable for brand identity and design inspiration.`,
+
+      // Product/Object image 1
+      `Generate a high-quality, professional product photography image featuring "${themePrompt}". Create a clean, modern composition with studio lighting, shallow depth of field, and a minimalist background. The image should showcase the product/object in its best light with proper shadows and highlights. Use a neutral background (white, gray, or subtle gradient) and ensure the subject is the clear focal point. Make it suitable for commercial use and brand presentation.`,
+
+      // Product/Object image 2
+      `Create a lifestyle or contextual image featuring "${themePrompt}" in a natural, everyday setting. Show the product/object being used or displayed in a realistic environment that enhances its appeal. Use natural lighting, warm tones, and a relatable background that tells a story. The composition should be balanced and visually appealing while maintaining focus on the main subject. Make it suitable for marketing and social media content.`,
+    ];
+
+    // Generate 3 images in parallel with specific prompts
+    const imagePromises = prompts.map(async (prompt, index) => {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: prompt,
+                },
+              ],
+            },
+          ],
+          generationConfig: {
+            responseModalities: ["TEXT", "IMAGE"],
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `API request ${index + 1} failed with status ${response.status}`
+        );
       }
-    };
 
-    const imageUrls = getImagesForTheme(themePrompt);
-    
-    // Create image objects with descriptive alt text
-    const images = imageUrls.slice(0, 6).map((url, index) => ({
-      url,
-      alt: `${themePrompt} inspiration ${index + 1}`
-    }));
+      const data = await response.json();
+      const imageData = data?.candidates?.[0]?.content?.parts?.find(
+        (part: GeminiPart) => part.inlineData
+      )?.inlineData;
 
-    return NextResponse.json({ images });
+      if (!imageData) {
+        throw new Error(`No image data received for variation ${index + 1}`);
+      }
+
+      const imageTypes = [
+        "color-palette",
+        "product-studio",
+        "product-lifestyle",
+      ];
+      const imageDescriptions = [
+        `Color palette for ${themePrompt}`,
+        `Studio product shot of ${themePrompt}`,
+        `Lifestyle image of ${themePrompt}`,
+      ];
+
+      return {
+        url: `data:${imageData.mimeType};base64,${imageData.data}`,
+        alt: imageDescriptions[index],
+        id: `${imageTypes[index]}-${index + 1}`,
+        type: imageTypes[index],
+        description: imageDescriptions[index],
+      };
+    });
+
+    const images = await Promise.all(imagePromises);
+
+    return NextResponse.json({
+      images,
+      theme: themePrompt,
+      generatedAt: new Date().toISOString(),
+    });
   } catch (error) {
-    console.error('Error generating mood board:', error);
+    console.error("Error generating mood board:", error);
     return NextResponse.json(
-      { error: 'Failed to generate mood board' },
+      { error: "Failed to generate mood board" },
       { status: 500 }
     );
   }

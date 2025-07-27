@@ -1,7 +1,8 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+// Add configuration for dynamic API route
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,12 +10,10 @@ export async function POST(request: NextRequest) {
 
     if (!productName || !description) {
       return NextResponse.json(
-        { error: 'Product name and description are required' },
+        { error: "Product name and description are required" },
         { status: 400 }
       );
     }
-
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
     const prompt = `
 You are an expert copywriter specializing in digital marketing. Create compelling ad copy for the following product:
@@ -57,23 +56,47 @@ Respond in this exact JSON format:
 Make all copy compelling, benefit-focused, and action-oriented.
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    
+    const apiKey = process.env.GEMINI_API_KEY;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [{ text: prompt }],
+          },
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (!text) {
+      throw new Error("Invalid response format from AI");
+    }
+
     // Extract JSON from response
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      throw new Error('Invalid response format from AI');
+      throw new Error("Invalid response format from AI");
     }
 
     const parsedResponse = JSON.parse(jsonMatch[0]);
-    
+
     return NextResponse.json(parsedResponse);
   } catch (error) {
-    console.error('Error generating ad copy:', error);
+    console.error("Error generating ad copy:", error);
     return NextResponse.json(
-      { error: 'Failed to generate ad copy' },
+      { error: "Failed to generate ad copy" },
       { status: 500 }
     );
   }

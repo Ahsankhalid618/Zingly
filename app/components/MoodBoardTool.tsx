@@ -1,37 +1,52 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Loader from './Loader';
+import { useState } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Loader from "./Loader";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface MoodBoardImage {
   url: string;
   alt: string;
+  id: string;
+  type?: string;
+  description?: string;
 }
 
 export default function MoodBoardTool() {
-  const [themePrompt, setThemePrompt] = useState('');
+  const [themePrompt, setThemePrompt] = useState("");
   const [images, setImages] = useState<MoodBoardImage[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+  const [selectedImage, setSelectedImage] = useState<MoodBoardImage | null>(
+    null
+  );
 
   const handleGenerate = async () => {
     if (!themePrompt.trim()) {
-      setError('Please enter a visual theme prompt');
+      setError("Please enter a visual theme prompt");
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
     setImages([]);
 
     try {
-      const response = await fetch('/api/generate-images', {
-        method: 'POST',
+      const response = await fetch("/api/generate-images", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           themePrompt,
@@ -39,17 +54,27 @@ export default function MoodBoardTool() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate mood board');
+        throw new Error("Failed to generate mood board");
       }
 
       const data = await response.json();
       setImages(data.images);
     } catch (err) {
-      setError('Failed to generate mood board. Please try again.');
-      console.error('Error:', err);
+      setError("Failed to generate mood board. Please try again.");
+      console.error("Error:", err);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDownload = (image: MoodBoardImage) => {
+    // Create a temporary link element
+    const link = document.createElement("a");
+    link.href = image.url;
+    link.download = `moodboard-${image.id}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -64,7 +89,10 @@ export default function MoodBoardTool() {
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
-              <label htmlFor="themePrompt" className="block text-sm font-medium text-slate-700 mb-2">
+              <label
+                htmlFor="themePrompt"
+                className="block text-sm font-medium text-slate-700 mb-2"
+              >
                 Visual Theme Prompt *
               </label>
               <Input
@@ -90,7 +118,7 @@ export default function MoodBoardTool() {
               disabled={loading}
               className="w-full bg-slate-800 hover:bg-slate-700 text-white py-3"
             >
-              {loading ? 'Generating...' : 'Generate MoodBoard'}
+              {loading ? "Generating..." : "Generate MoodBoard"}
             </Button>
           </CardContent>
         </Card>
@@ -101,29 +129,76 @@ export default function MoodBoardTool() {
             <Loader message="Creating your visual mood board..." />
           </div>
         )}
-        
+
         {images.length > 0 && (
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold text-slate-800 text-center">
-              Your MoodBoard: "{themePrompt}"
-            </h3>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {images.map((image, index) => (
-                <Card key={index} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-                  <div className="aspect-square relative bg-slate-100">
-                    <img
+                <Card
+                  key={image.id}
+                  className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  <div className="aspect-square relative bg-slate-100 group">
+                    <Image
                       src={image.url}
                       alt={image.alt}
-                      className="w-full h-full object-cover transition-transform hover:scale-105"
+                      fill
+                      className="object-cover transition-transform hover:scale-105"
+                      unoptimized
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = `https://images.pexels.com/photos/3586966/pexels-photo-3586966.jpeg?auto=compress&cs=tinysrgb&w=400`;
-                        target.alt = 'Placeholder inspiration image';
+                        target.alt = "Placeholder inspiration image";
                       }}
                     />
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity flex items-center justify-center opacity-0 group-hover:opacity-100">
+                      <div className="flex gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              onClick={() => setSelectedImage(image)}
+                              variant="secondary"
+                              className="bg-white text-black hover:bg-gray-100"
+                            >
+                              Preview
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-4xl">
+                            <DialogHeader>
+                              <DialogTitle>Image Preview</DialogTitle>
+                              <DialogDescription>
+                                Generated for theme: {themePrompt}
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="mt-4">
+                              <Image
+                                src={selectedImage?.url || ""}
+                                alt={selectedImage?.alt || ""}
+                                width={800}
+                                height={600}
+                                className="w-full h-auto rounded-lg"
+                                unoptimized
+                              />
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                        <Button
+                          onClick={() => handleDownload(image)}
+                          variant="secondary"
+                          className="bg-white text-black hover:bg-gray-100"
+                        >
+                          Download
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                   <CardContent className="p-3">
-                    <p className="text-sm text-slate-600 text-center">{image.alt}</p>
+                    <p className="text-sm text-slate-600 text-center">
+                      {image.type
+                        ? image.description
+                        : `Variation ${index + 1}`}
+                    </p>
                   </CardContent>
                 </Card>
               ))}

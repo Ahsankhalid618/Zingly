@@ -1,6 +1,6 @@
-# Startup Toolkit - AI-Powered MVP Builder
+# Zingly - Magical AI Tools for Startups
 
-A comprehensive AI-powered web application that helps startup founders create compelling marketing content, understand their users, and generate visual inspiration. Built with Next.js 15, Tailwind CSS, and Google's Gemini AI.
+A comprehensive AI-powered web application that helps startup founders create compelling marketing content, understand their users, and generate visual inspiration with magical AI tools. Built with Next.js 15, Tailwind CSS, and Google's Gemini AI.
 
 ## 🚀 Features
 
